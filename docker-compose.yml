@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./compose/backend/Dockerfile
+    container_name: turniejeapp-backend
+    command: sh -c "./docker_script.sh"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    networks:
+      turniejeapp:
+        aliases:
+          - backend
+
+#  frontend:
+#    build:
+#      context: .
+#      dockerfile: ./compose/frontend/Dockerfile
+#    container_name: turniejeapp-frontend
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - ./frontend:/app
+#    stdin_open: true
+#    tty: true
+#    networks:
+#      turniejeapp:
+#        aliases:
+#          - frontend
+
+
+networks:
+    turniejeapp:
