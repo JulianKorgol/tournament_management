@@ -6,6 +6,6 @@ class Command(BaseCommand):
     help = 'Loads example data to database'
 
     def handle(self, *args, **options):
-        admin = User.objects.create_user('julian', '', '1234')
-        admin.save()
+        julian = User.objects.create_user('julian', '', '1234')
+        julian.save()
         print('Data loaded successfully')
