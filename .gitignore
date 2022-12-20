@@ -1,2 +1,5 @@
 # JetBrains
 .idea/
+
+# Backend
+/backend/db.sqlite3
