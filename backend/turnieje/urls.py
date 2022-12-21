@@ -7,7 +7,6 @@ router = routers.DefaultRouter()
 
 
 urlpatterns = [
-    path('', views.IndexView.as_view()),
     path('login/', views.LoginView.as_view()),
-    path('example/', views.ExampleEndpointView.as_view()),
+    path('logout/', views.LogoutView.as_view()),
 ]

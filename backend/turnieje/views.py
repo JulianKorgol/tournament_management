@@ -15,13 +15,6 @@ from django.contrib.auth.models import User
 from .serializers import LoginSerializer
 
 
-class IndexView(generics.GenericAPIView):
-    permission_classes = (AllowAny,)
-
-    def get(self, request):
-        return Response({'message': "It's working!"})
-
-
 class LoginView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
@@ -42,3 +35,11 @@ class ExampleEndpointView(generics.GenericAPIView):
 
     def get(self, request):
         return Response({'message': "You are logged in!", 'user': request.user.username})
+
+
+class LogoutView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        logout(request)
+        return Response(status=HTTP_200_OK)
