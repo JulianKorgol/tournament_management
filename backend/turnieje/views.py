@@ -12,7 +12,12 @@ from rest_framework.status import (
 from rest_framework.response import Response
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from .models import Account, Role, Tournaments, AcoountToTournament, Matches
+
+# Input Serializers
 from .serializers import LoginSerializer
+# Output Serializers
+from .serializers import DashboardAdminTournamentsSerializer, DashboardTournamentsSerializer
 
 
 class LoginView(generics.GenericAPIView):
@@ -40,6 +45,30 @@ class ExampleEndpointView(generics.GenericAPIView):
 class LogoutView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def get(self, request):
         logout(request)
         return Response(status=HTTP_200_OK)
+
+
+class DashboardView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        acc = Account.objects.get(user=request.user)
+
+        if acc.role.name == "player" or acc.role.name == "coordinator":
+            try:
+                tournaments = AcoountToTournament.objects.filter(account=acc)
+            except AcoountToTournament.DoesNotExist:
+                return Response({"tournaments": []})
+
+            tournaments_data = DashboardTournamentsSerializer(tournaments, many=True).data
+            return Response({"tournaments": tournaments_data})
+        elif acc.role.name == "admin":
+            try:
+                tournaments = Tournaments.objects.all()
+            except Tournaments.DoesNotExist:
+                return Response({"tournaments": []})
+
+            tournaments_data = DashboardAdminTournamentsSerializer(tournaments, many=True).data
+            return Response({"tournaments": tournaments_data})
