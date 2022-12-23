@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from turnieje.models import Role, Account, Tournaments, AcoountToTournament, Matches
+from turnieje.models import Role, Account, Tournament, AccountToTournament, Game
 
 
 class Command(BaseCommand):
@@ -44,10 +44,10 @@ class Command(BaseCommand):
         usertest_coordinator = Account.objects.create(user=usertest_cord, role=coordinator_role)
         usertest_coordinator.save()
 
-        tournament_public = Tournaments.objects.create(name='Turniej publiczny', description='Opis turnieju publicznego', start_date='2020-01-01', end_date='2020-01-02', public=True)
+        tournament_public = Tournament.objects.create(name='Turniej publiczny', description='Opis turnieju publicznego', start_date='2020-01-01', end_date='2020-01-02', public=True)
         tournament_public.save()
 
-        tournament_private = Tournaments.objects.create(name='Turniej prywatny', description='Opis turnieju prywatnego', start_date='2020-01-01', end_date='2020-01-02', public=False)
+        tournament_private = Tournament.objects.create(name='Turniej prywatny', description='Opis turnieju prywatnego', start_date='2020-01-01', end_date='2020-01-02', public=False)
         tournament_private.save()
 
         print('Data loaded successfully')

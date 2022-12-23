@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 
 class Role(models.Model):
@@ -17,28 +18,29 @@ class Account(models.Model):
         return self.user.username
 
 
-class Tournaments(models.Model):
+class Tournament(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     start_date = models.DateField()
     end_date = models.DateField()
     public = models.BooleanField(default=False)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def __str__(self):
         return self.name
 
 
-class AcoountToTournament(models.Model):
+class AccountToTournament(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    tournament = models.ForeignKey(Tournaments, on_delete=models.CASCADE)
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.account.user.username + " " + self.tournament.name
 
 
-class Matches(models.Model):
-    tournament = models.ForeignKey(Tournaments, on_delete=models.CASCADE)
+class Game(models.Model):
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     player1 = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='player1')
     player2 = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='player2')
     player1_score = models.IntegerField()

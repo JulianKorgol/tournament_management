@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tournaments, AcoountToTournament
+from .models import Tournament, AccountToTournament, Account, Role
 
 
 class LoginSerializer(serializers.Serializer):
@@ -9,8 +9,8 @@ class LoginSerializer(serializers.Serializer):
 
 class DashboardAdminTournamentsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Tournaments
-        fields = ('name', 'start_date', 'end_date', 'public')
+        model = Tournament
+        fields = ('name', 'start_date', 'end_date', 'public', 'uuid')
 
 
 class DashboardTournamentsSerializer(serializers.ModelSerializer):
@@ -20,5 +20,48 @@ class DashboardTournamentsSerializer(serializers.ModelSerializer):
     public = serializers.BooleanField(source='tournament.public')
 
     class Meta:
-        model = AcoountToTournament
+        model = AccountToTournament
         fields = ('tournament_name', 'start_date', 'end_date', 'public', 'role')
+
+
+class TournamentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tournament
+        fields = ('name', 'description', 'start_date', 'end_date', 'public', 'uuid')
+
+
+class TournamentDetailsViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tournament
+        fields = ('uuid',)
+
+
+class AccountBasicDetailsSerializer(serializers.Serializer):
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
+    role = serializers.CharField(source='role.name')
+    class Meta:
+        model = Account
+        fields = ('first_name', 'last_name', 'role')
+
+
+class YourRoleToTournamentSerializer(serializers.ModelSerializer):
+    role = serializers.CharField(source='role.name')
+    class Meta:
+        model = AccountToTournament
+        fields = ('role',)
+
+
+class AdminPanelRolesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ('name',)
+
+
+class AdminPanelAddUserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+    role = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.CharField()
