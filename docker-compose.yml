@@ -16,21 +16,21 @@ services:
         aliases:
           - backend
 
-#  frontend:
-#    build:
-#      context: .
-#      dockerfile: ./compose/frontend/Dockerfile
-#    container_name: turniejeapp-frontend
-#    ports:
-#      - "3000:3000"
-#    volumes:
-#      - ./frontend:/app
-#    stdin_open: true
-#    tty: true
-#    networks:
-#      turniejeapp:
-#        aliases:
-#          - frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: ./compose/frontend/Dockerfile
+    container_name: turniejeapp-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    stdin_open: true
+    tty: true
+    networks:
+      turniejeapp:
+        aliases:
+          - frontend
 
 
 networks:
