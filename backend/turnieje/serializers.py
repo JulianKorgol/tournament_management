@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Tournament, AccountToTournament, Account, Role
-
+from .models import Tournament, AccountToTournament, Account, Role, Game
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -65,3 +64,61 @@ class AdminPanelAddUserSerializer(serializers.Serializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     email = serializers.CharField()
+
+
+class AddTournamentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tournament
+        fields = ('name', 'description', 'start_date', 'end_date')
+
+
+class ManageTournamentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tournament
+        fields = ('name', 'description', 'start_date', 'end_date', 'public')
+
+
+class AddPeopleToTournamentSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    role = serializers.CharField()
+
+
+class RemovePeopleFromTournamentSerializer(serializers.Serializer):
+    username = serializers.CharField()
+
+
+class AddUserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.CharField()
+
+
+class GameSerializer(serializers.ModelSerializer):
+    player1 = serializers.CharField(source='player1.user.username')
+    player2 = serializers.CharField(source='player2.user.username')
+    class Meta:
+        model = Game
+        fields = ('player1', 'player2', 'player1_score', 'player2_score', 'date')
+
+
+class AccountToTournamentSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='account.user.username')
+    first_name = serializers.CharField(source='account.user.first_name')
+    last_name = serializers.CharField(source='account.user.last_name')
+    class Meta:
+        model = AccountToTournament
+        fields = ('username', 'first_name', 'last_name')
+
+
+class AddScoreSerializer(serializers.Serializer):
+    player1 = serializers.CharField()
+    player2 = serializers.CharField()
+    player1_score = serializers.IntegerField()
+    player2_score = serializers.IntegerField()
+
+
+class RemoveScoreSerializer(serializers.Serializer):
+    player1 = serializers.CharField()
+    player2 = serializers.CharField()

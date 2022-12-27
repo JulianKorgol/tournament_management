@@ -43,8 +43,8 @@ class Game(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     player1 = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='player1')
     player2 = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='player2')
-    player1_score = models.IntegerField()
-    player2_score = models.IntegerField()
+    player1_score = models.IntegerField(default=None, null=True)
+    player2_score = models.IntegerField(default=None, null=True)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
