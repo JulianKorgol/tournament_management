@@ -85,6 +85,7 @@ class DashboardView(generics.GenericAPIView):
 
             tournaments_data = DashboardAdminTournamentsSerializer(tournaments, many=True).data
             return Response({"tournaments": tournaments_data})
+        return Response(None, status=HTTP_400_BAD_REQUEST)
 
 
 class ListTournamentsView(generics.GenericAPIView):
@@ -196,7 +197,7 @@ class AddTournament(generics.GenericAPIView):
             if not name or not description or not start_date or not end_date:
                 return Response({"error": "All fields are required"}, status=HTTP_400_BAD_REQUEST)
 
-            tournament = Tournament.objects.create(name=name, description=description , start_date=start_date, end_date=end_date)
+            tournament = Tournament.objects.create(name=name, description=description, start_date=start_date, end_date=end_date)
             tournament.save()
 
             return Response({'success': True, 'uuid': tournament.uuid}, status=HTTP_200_OK)
@@ -673,4 +674,3 @@ class MyGames(generics.GenericAPIView):
             games_data = GameSerializer(games, many=True).data
             return Response({"games": games_data}, status=HTTP_200_OK)
         return Response(None, status=HTTP_400_BAD_REQUEST)
-
