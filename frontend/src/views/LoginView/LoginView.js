@@ -28,6 +28,7 @@ const Login = (email, password) => {
         const email = e.target.email.value;
         const password = e.target.password.value;
         const login_entry = loginuser(email, password);
+        console.log(login_entry)
         if (login_entry) {
             loadingHandler();
             toast({title: "Zalogowano pomyślnie", status: "success"});

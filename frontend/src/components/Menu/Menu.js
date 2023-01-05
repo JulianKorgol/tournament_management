@@ -22,7 +22,7 @@ const Menu = () => {
                 </ul>
             </div>
             <div className={styles.buttonwrapper}>
-                <a className={styles.button} href="#">Logowanie</a>
+                <a className={styles.button} href="/login">Logowanie</a>
             </div>
         </header>
     );

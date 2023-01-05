@@ -21,6 +21,7 @@ services:
       context: .
       dockerfile: ./compose/frontend/Dockerfile
     container_name: turniejeapp-frontend
+    command: sh -c "./docker_script.sh"
     ports:
       - "3000:3000"
     volumes:
