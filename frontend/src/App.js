@@ -14,14 +14,9 @@ function App() {
     const [loading, setLoading] = useState(false);
 
 
-    const loadingHandler = () => {
-        setLoading(loading === false);
-    }
-
-
     return (
         <div className="App">
-            <AppContext.Provider value={{ loading, loadingHandler }}>
+            <AppContext.Provider value={{ loading, setLoading }}>
                 {loading ? <ScreenLoader /> : null}
                 <Menu />
                 <BrowserRouter>

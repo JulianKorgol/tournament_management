@@ -4,37 +4,37 @@ import styles from "./LoginView.module.scss";
 import Cookies from "js-cookie"
 import { post } from "../../functions/Requests/Requests";
 import AppContext from "../../functions/AppContext/AppContext";
-import { useToast } from "@chakra-ui/react";
 
 
 const Login = (email, password) => {
-    const { loadingHandler } = React.useContext(AppContext);
-    const toast = useToast({ isClosable: true, position: "bottom-right", duration: 5000 });
+    const { setLoading } = React.useContext(AppContext);
 
 
-    const loginuser = async () => {
-        const response = await post("login/", {email: email, password: password});
+    const loginuser = async (username, password) => {
+        const response = await post("login/", {username: username, password: password}).catch(err => err.response);
 
         if (response.status === 200) {
             axios.defaults.headers.common['X-CSRFToken'] = Cookies.get("csrftoken")
-            return True;
+            return true;
         }
-        return False;
+        return false;
     }
 
-    const formSubmit = (e) => {
+    const formSubmit = async (e) => {
         e.preventDefault();
-        loadingHandler();
-        const email = e.target.email.value;
+        // setLoading(true);
+        const username = e.target.username.value;
         const password = e.target.password.value;
-        const login_entry = loginuser(email, password);
-        console.log(login_entry)
+
+        const login_entry = await loginuser(username, password);
+
         if (login_entry) {
-            loadingHandler();
-            toast({title: "Zalogowano pomyślnie", status: "success"});
+            setLoading(false);
+            return
         }
-        loadingHandler();
-        toast({title: "Błąd logowania. Spróbuj ponownie.", status: "error"});
+
+
+        setLoading(false);
     }
 
 
@@ -45,8 +45,8 @@ const Login = (email, password) => {
             <div className={styles.form}>
                 <form onSubmit={formSubmit}>
                     <div className={styles.formContent}>
-                        <label className={styles.label} htmlFor="email">Email</label>
-                        <input className={styles.input} type="email" name="email" id="email" />
+                        <label className={styles.label} htmlFor="username">Email</label>
+                        <input className={styles.input} type="text" name="username" id="username" />
                     </div>
                     <div className={styles.formContent}>
                         <label className={styles.label} htmlFor="password">Hasło</label>
