@@ -4,10 +4,25 @@ import styles from "./LoginView.module.scss";
 import Cookies from "js-cookie"
 import { post } from "../../functions/Requests/Requests";
 import AppContext from "../../functions/AppContext/AppContext";
+import Toast from "../../functions/Toast/Toast";
+
 
 
 const Login = (email, password) => {
     const { setLoading } = React.useContext(AppContext);
+    const [open, setOpen] = React.useState(false);
+    const [message, setMessage] = React.useState("");
+    const [status, setStatus] = React.useState("success");
+
+
+    const MakeToast = (message, status) => {
+        setMessage(message);
+        setStatus(status);
+        setOpen(true);
+        setTimeout(() => {
+            setOpen(false);
+        }, 6000);
+    }
 
 
     const loginuser = async (username, password) => {
@@ -22,7 +37,9 @@ const Login = (email, password) => {
 
     const formSubmit = async (e) => {
         e.preventDefault();
-        // setLoading(true);
+        setOpen(false);
+        setLoading(true);
+
         const username = e.target.username.value;
         const password = e.target.password.value;
 
@@ -30,10 +47,11 @@ const Login = (email, password) => {
 
         if (login_entry) {
             setLoading(false);
+            MakeToast("Logowanie powiodło się", "success");
             return
         }
 
-
+        MakeToast("Logowanie nie powiodło się", "error");
         setLoading(false);
     }
 
@@ -57,6 +75,7 @@ const Login = (email, password) => {
                     </div>
                 </form>
             </div>
+            {open ? <Toast message={message} status={status} /> : null}
         </div>
     );
 }
