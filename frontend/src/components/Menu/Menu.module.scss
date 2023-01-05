@@ -1,0 +1,38 @@
+.wrapper {
+  padding: 15px 30px;
+  display: grid;
+  grid-template-columns: 70px 37% 1fr 100px;
+  align-items: center;
+
+  .name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .navigation {
+    display: inline-flex;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .navigationItem {
+    list-style: none;
+    margin-right: 30px;
+
+    &link {
+      text-decoration: none;
+      color: gray;
+    }
+  }
+
+  .buttonwrapper {
+    .button {
+      background: #3763f4;
+      padding: 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      color: white;
+      text-decoration: none;
+    }
+  }
+}
