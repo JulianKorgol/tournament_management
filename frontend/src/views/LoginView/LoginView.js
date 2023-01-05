@@ -1,15 +1,41 @@
 import React from "react";
+import axios from "axios"
 import styles from "./LoginView.module.scss";
+import Cookies from "js-cookie"
+import { post } from "../../functions/Requests/Requests";
+import AppContext from "../../functions/AppContext/AppContext";
+import { useToast } from "@chakra-ui/react";
 
 
-const Login = () => {
+const Login = (email, password) => {
+    const { loadingHandler } = React.useContext(AppContext);
+    const toast = useToast({ isClosable: true, position: "bottom-right", duration: 5000 });
+
+
+    const loginuser = async () => {
+        const response = await post("login/", {email: email, password: password});
+
+        if (response.status === 200) {
+            axios.defaults.headers.common['X-CSRFToken'] = Cookies.get("csrftoken")
+            return True;
+        }
+        return False;
+    }
+
     const formSubmit = (e) => {
         e.preventDefault();
+        loadingHandler();
         const email = e.target.email.value;
         const password = e.target.password.value;
-
-    //     Axios...
+        const login_entry = loginuser(email, password);
+        if (login_entry) {
+            loadingHandler();
+            toast({title: "Zalogowano pomyślnie", status: "success"});
+        }
+        loadingHandler();
+        toast({title: "Błąd logowania. Spróbuj ponownie.", status: "error"});
     }
+
 
     return (
         <div className={styles.wrapper}>
