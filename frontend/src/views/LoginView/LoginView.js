@@ -5,6 +5,7 @@ import Cookies from "js-cookie"
 import { get, post } from "../../functions/Requests/Requests";
 import AppContext from "../../functions/AppContext/AppContext";
 import Toast from "../../functions/Toast/Toast";
+import { useNavigate } from "react-router";
 
 
 
@@ -13,6 +14,7 @@ const Login = () => {
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
     const [status, setStatus] = React.useState("success");
+    const redirection = useNavigate();
 
 
     const MakeToast = (message, status) => {
@@ -29,9 +31,8 @@ const Login = () => {
         const response = await post("login/", {username: username, password: password}).catch(err => err.response);
 
         if (response.status === 200) {
-            console.log(response);
             const userInfo = await get("me/", { withCredentials: true }).catch(err => err.response);
-            console.log(userInfo);
+
             if (userInfo.status === 200) {
                 axios.defaults.headers.common['X-CSRFToken'] = Cookies.get("csrftoken")
                 return true;
@@ -53,11 +54,14 @@ const Login = () => {
         if (login_entry) {
             setLoading(false);
             MakeToast("Logowanie powiodło się", "success");
+            setTimeout(() => {
+                redirection("/panel");
+            }, 1000);
             return
         }
 
-        MakeToast("Logowanie nie powiodło się", "error");
         setLoading(false);
+        MakeToast("Logowanie nie powiodło się", "error");
     }
 
 
@@ -68,7 +72,7 @@ const Login = () => {
             <div className={styles.form}>
                 <form onSubmit={formSubmit}>
                     <div className={styles.formContent}>
-                        <label className={styles.label} htmlFor="username">Email</label>
+                        <label className={styles.label} htmlFor="username">Nazwa użytkownika</label>
                         <input className={styles.input} type="text" name="username" id="username" />
                     </div>
                     <div className={styles.formContent}>
