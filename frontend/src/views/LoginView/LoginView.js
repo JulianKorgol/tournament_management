@@ -28,7 +28,10 @@ const Login = () => {
 
 
     const loginuser = async (username, password) => {
-        const response = await post("login/", {username: username, password: password}).catch(err => err.response);
+        axios.defaults.withCredentials = true;
+        const response = await post("login/", {username: username, password: password}, { withCredentials: true }).catch(err => err.response);
+        Cookies.set("csrftoken", response.data.csrftoken);
+        Cookies.set("sessionid", response.data.sessionid);
 
         if (response.status === 200) {
             const userInfo = await get("me/", { withCredentials: true }).catch(err => err.response);
