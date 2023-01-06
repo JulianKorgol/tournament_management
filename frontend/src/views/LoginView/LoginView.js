@@ -2,13 +2,13 @@ import React from "react";
 import axios from "axios"
 import styles from "./LoginView.module.scss";
 import Cookies from "js-cookie"
-import { post } from "../../functions/Requests/Requests";
+import { get, post } from "../../functions/Requests/Requests";
 import AppContext from "../../functions/AppContext/AppContext";
 import Toast from "../../functions/Toast/Toast";
 
 
 
-const Login = (email, password) => {
+const Login = () => {
     const { setLoading } = React.useContext(AppContext);
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
@@ -29,8 +29,13 @@ const Login = (email, password) => {
         const response = await post("login/", {username: username, password: password}).catch(err => err.response);
 
         if (response.status === 200) {
-            axios.defaults.headers.common['X-CSRFToken'] = Cookies.get("csrftoken")
-            return true;
+            console.log(response);
+            const userInfo = await get("me/", { withCredentials: true }).catch(err => err.response);
+            console.log(userInfo);
+            if (userInfo.status === 200) {
+                axios.defaults.headers.common['X-CSRFToken'] = Cookies.get("csrftoken")
+                return true;
+            }
         }
         return false;
     }
