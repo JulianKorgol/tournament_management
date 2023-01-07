@@ -104,9 +104,9 @@ class GameSerializer(serializers.ModelSerializer):
 
 
 class AccountToTournamentSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='account.user.username')
-    first_name = serializers.CharField(source='account.user.first_name')
-    last_name = serializers.CharField(source='account.user.last_name')
+    username = serializers.CharField(source='user.username')
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
     class Meta:
         model = AccountToTournament
         fields = ('username', 'first_name', 'last_name')

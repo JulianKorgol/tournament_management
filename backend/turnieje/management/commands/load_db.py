@@ -14,32 +14,32 @@ class Command(BaseCommand):
         coordinator_role.save()
         admin_role.save()
 
-        julian = User.objects.create_user('julian', '', '1234')
+        julian = User.objects.create_user('julian', '', '1234', first_name='Jan', last_name='Kowalski')
         julian.save()
         julian_admin = Account.objects.create(user=julian, role=admin_role)
         julian_admin.save()
 
-        usertest = User.objects.create_user('usertest', '', '1234')
+        usertest = User.objects.create_user('usertest', '', '1234', first_name='Przemysław', last_name='Politański')
         usertest.save()
         usertest_player = Account.objects.create(user=usertest, role=player_role)
         usertest_player.save()
 
-        usertest2 = User.objects.create_user('usertest2', '', '1234')
+        usertest2 = User.objects.create_user('usertest2', '', '1234', first_name='Marcin', last_name='Straszewski')
         usertest2.save()
         usertest2_player = Account.objects.create(user=usertest2, role=player_role)
         usertest2_player.save()
 
-        usertest3 = User.objects.create_user('usertest3', '', '1234')
+        usertest3 = User.objects.create_user('usertest3', '', '1234', first_name='Stanisław', last_name='Niedzielski')
         usertest3.save()
         usertest3_player = Account.objects.create(user=usertest3, role=player_role)
         usertest3_player.save()
 
-        usertest4 = User.objects.create_user('usertest4', '', '1234')
+        usertest4 = User.objects.create_user('usertest4', '', '1234', first_name='Jack', last_name='Sparrow')
         usertest4.save()
         usertest4_player = Account.objects.create(user=usertest4, role=player_role)
         usertest4_player.save()
 
-        usertest_cord = User.objects.create_user('testcoordinator', '', '1234')
+        usertest_cord = User.objects.create_user('testcoordinator', '', '1234', first_name='Jan', last_name='Swierczek')
         usertest_cord.save()
         usertest_coordinator = Account.objects.create(user=usertest_cord, role=coordinator_role)
         usertest_coordinator.save()

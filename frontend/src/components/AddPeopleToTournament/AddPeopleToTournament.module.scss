@@ -1,0 +1,28 @@
+.wrapper {
+  margin-bottom: 40px;
+  border: 1px solid #ccc;
+  padding: 40px;
+  display: inline-block;
+
+  .selects {
+    .select {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      select {
+        padding: 10px;
+        text-align: center;
+      }
+    }
+  }
+
+  .submit input {
+    margin-top: 20px;
+    padding: 10px;
+    text-align: center;
+    background-color: #06a0b2;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+}

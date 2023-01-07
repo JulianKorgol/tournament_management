@@ -266,6 +266,16 @@ class AddPeopleToTournament(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = AddPeopleToTournamentSerializer
 
+    def get(self, request, tournament_uuid):
+        acc = Account.objects.get(user=request.user)
+        role = acc.role.name
+
+        if role == 'admin' or role == 'coordinator':
+            accounts = Account.objects.all()
+            accounts_data = AccountToTournamentSerializer(accounts, many=True).data
+            return Response({"accounts": accounts_data}, status=HTTP_200_OK)
+        return Response(None, status=HTTP_400_BAD_REQUEST)
+
     def post(self, request, tournament_uuid):
         acc = Account.objects.get(user=request.user)
         role = acc.role.name
@@ -366,32 +376,17 @@ class GenerateGames(generics.GenericAPIView):
             if len(accounts) < 2:
                 return Response({"error": "Not enough players"}, status=HTTP_400_BAD_REQUEST)
 
-            accounts = accounts.values_list('account', flat=True)
-            accounts = Account.objects.filter(id__in=accounts)
-
-            if len(accounts) < 2:
-                return Response({"error": "Not enough players"}, status=HTTP_400_BAD_REQUEST)
-
-            accounts = accounts.values_list('user', flat=True)
-            accounts = User.objects.filter(id__in=accounts)
-
-            if len(accounts) < 2:
-                return Response({"error": "Not enough players"}, status=HTTP_400_BAD_REQUEST)
-
-            accounts = accounts.values_list('id', flat=True)
-            accounts = list(accounts)
-
             games = []
             for i in range(len(accounts)):
                 for j in range(len(accounts)):
                     if i != j:
                         try:
-                            game = Game.objects.get(player1=accounts[i], player2=accounts[j], tournament=tournament)
+                            game = Game.objects.get(player1=accounts[i].account, player2=accounts[j].account, tournament=tournament)
                         except Game.DoesNotExist:
                             try:
-                                game = Game.objects.get(player1=accounts[j], player2=accounts[i], tournament=tournament)
+                                game = Game.objects.get(player1=accounts[j].account, player2=accounts[i].account, tournament=tournament)
                             except Game.DoesNotExist:
-                                games.append(Game.objects.create(white=accounts[i], black=accounts[j], tournament=tournament))
+                                games.append(Game.objects.create(player1=accounts[i].account, player2=accounts[j].account, tournament=tournament))
 
             for game in games:
                 game.save()
@@ -670,6 +665,46 @@ class MyGames(generics.GenericAPIView):
             games = Game.objects.filter(Q(player1=acc) | Q(player2=acc), tournament=tournament)
             if len(games) == 0:
                 return Response({"error": "You have no games"}, status=HTTP_400_BAD_REQUEST)
+
+            games_data = GameSerializer(games, many=True).data
+            return Response({"games": games_data}, status=HTTP_200_OK)
+        return Response(None, status=HTTP_400_BAD_REQUEST)
+
+
+class TournamentMatches(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, tournament_uuid):
+        acc = Account.objects.get(user=request.user)
+        role = acc.role.name
+
+        if role == 'player':
+            if not tournament_uuid:
+                return Response({"error": "Invalid tournament"}, status=HTTP_400_BAD_REQUEST)
+
+            try:
+                tournament = Tournament.objects.get(uuid=tournament_uuid)
+            except Tournament.DoesNotExist:
+                return Response({"error": "Invalid tournament"}, status=HTTP_400_BAD_REQUEST)
+
+            games = Game.objects.filter(Q(player1=acc) | Q(player2=acc), tournament=tournament)
+            if len(games) == 0:
+                return Response({"error": "You have no games"}, status=HTTP_200_OK)
+
+            games_data = GameSerializer(games, many=True).data
+            return Response({"games": games_data}, status=HTTP_200_OK)
+        elif role == 'admin' or role == 'coordinator':
+            if not tournament_uuid:
+                return Response({"error": "Invalid tournament"}, status=HTTP_400_BAD_REQUEST)
+
+            try:
+                tournament = Tournament.objects.get(uuid=tournament_uuid)
+            except Tournament.DoesNotExist:
+                return Response({"error": "Invalid tournament"}, status=HTTP_400_BAD_REQUEST)
+
+            games = Game.objects.filter(tournament=tournament)
+            if len(games) == 0:
+                return Response({"error": "No games to show"}, status=HTTP_200_OK)
 
             games_data = GameSerializer(games, many=True).data
             return Response({"games": games_data}, status=HTTP_200_OK)

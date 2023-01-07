@@ -1,0 +1,79 @@
+.wrapper {
+  text-align: center;
+
+  h1 {
+    font-size: 48px;
+    font-weight: 700;
+  }
+
+  .content {
+    margin-top: 70px;
+    margin-bottom: 80px;
+
+    h2 {
+      font-size: 35px;
+      font-weight: 700;
+    }
+
+    .vip {
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: 400;
+        color: #19f5aa;
+    }
+  }
+
+  .manage {
+    margin-top: 70px;
+    margin-bottom: 80px;
+
+    .button_ {
+      &add {
+        margin-right: 30px;
+        background-color: #19f5aa;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 20px;
+        font-weight: 400;
+        cursor: pointer;
+      }
+
+      &modify {
+        margin-right: 30px;
+        background-color: #06a0b2;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 20px;
+        font-weight: 400;
+        cursor: pointer;
+      }
+
+      &delete {
+        margin-right: 30px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 20px;
+        font-weight: 400;
+        cursor: pointer;
+      }
+
+      &show {
+        background-color: #ffc107;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 20px;
+        font-weight: 400;
+        cursor: pointer;
+      }
+    }
+  }
+}

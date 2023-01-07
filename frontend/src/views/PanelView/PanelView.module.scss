@@ -1,0 +1,45 @@
+.wrapper {
+  text-align: center;
+
+  h1 {
+    font-size: 48px;
+    font-weight: 700;
+  }
+
+  .content {
+    margin-top: 70px;
+    margin-bottom: 80px;
+
+    h2 {
+        font-size: 35px;
+        font-weight: 700;
+    }
+  }
+
+  .tournaments {
+    display: flex;
+    margin-left: 15%;
+    margin-right: 15%;
+
+    .tournament {
+      border: 1px solid #eaeaea;
+      padding: 30px;
+      margin: 10px;
+    }
+
+    .tournament:hover {
+      border: 1px solid #19f5aa;
+    }
+
+    .button {
+      padding: 15px;
+      border-radius: 15px;
+      background-color: #19f5aa;
+    }
+
+    .button:hover {
+      background-color: #19f5aa;
+      opacity: 0.8;
+    }
+  }
+}

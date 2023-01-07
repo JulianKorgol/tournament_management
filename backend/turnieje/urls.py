@@ -13,6 +13,7 @@ urlpatterns = [
     path('me/<str:tournament_uuid>/games', views.MyGames.as_view()),
     path('dashboard/', views.DashboardView.as_view()),
     path('dashboard/tournament/<str:tournament_uuid>/', views.TournamentDetailsView.as_view()),
+    path('dashboard/tournament/<str:tournament_uuid>/matches', views.TournamentMatches.as_view()),
     # Public
     path('public/tournaments/', views.ListTournamentsView.as_view()),
     path('public/tournament/<str:tournament_uuid>/', views.TournamentView.as_view()),
@@ -24,7 +25,7 @@ urlpatterns = [
     path('coordinator_panel/tournament/<str:tournament_uuid>/manage/user/add/', views.AddPeopleToTournament.as_view()),
     path('coordinator_panel/tournament/<str:tournament_uuid>/manage/user/remove/', views.RemovePeopleFromTournament.as_view()),
     path('coordinator_panel/tournament/<str:tournament_uuid>/manage/games/generate/', views.GenerateGames.as_view()),
-    path('coordinator_panel/tournament/<str:tournament_uuid>/games/get/', views.GetGames.as_view()),
+    # path('coordinator_panel/tournament/<str:tournament_uuid>/games/get/', views.GetGames.as_view()),
     path('coordinator_panel/tournament/<str:tournament_uuid>/games/getnotplayed/', views.GetNotPlayedGames.as_view()),
     path('coordinator_panel/tournament/<str:tournament_uuid>/score/add/', views.AddScore.as_view()),
     path('coordinator_panel/tournament/<str:tournament_uuid>/score/modify/', views.ModifyScore.as_view()),

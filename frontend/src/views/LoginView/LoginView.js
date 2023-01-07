@@ -4,29 +4,15 @@ import styles from "./LoginView.module.scss";
 import Cookies from "js-cookie"
 import { get, post } from "../../functions/Requests/Requests";
 import AppContext from "../../functions/AppContext/AppContext";
-import Toast from "../../functions/Toast/Toast";
 import { useNavigate } from "react-router";
 import User from "../../functions/UserContext/UserContext";
 
 
 
 const Login = () => {
-    const { setLoading } = React.useContext(AppContext);
-    const [open, setOpen] = React.useState(false);
-    const [message, setMessage] = React.useState("");
-    const [status, setStatus] = React.useState("success");
+    const { setLoading, MakeToast } = React.useContext(AppContext);
+    const { checkLogin } = React.useContext(User);
     const redirection = useNavigate();
-    const { setUser } = React.useContext(User);
-
-
-    const MakeToast = (message, status) => {
-        setMessage(message);
-        setStatus(status);
-        setOpen(true);
-        setTimeout(() => {
-            setOpen(false);
-        }, 6000);
-    }
 
     const loginuser = async (username, password) => {
         axios.defaults.withCredentials = true;
@@ -36,11 +22,10 @@ const Login = () => {
 
         if (response.status === 200) {
             const userInfo = await get("me/", { withCredentials: true }).catch(err => err.response);
+            Cookies.set("role", userInfo.data.role);
 
             if (userInfo.status === 200) {
                 axios.defaults.headers.common['X-CSRFToken'] = Cookies.get("csrftoken")
-
-                setUser(userInfo.data);
                 return true;
             }
         }
@@ -49,7 +34,6 @@ const Login = () => {
 
     const formSubmit = async (e) => {
         e.preventDefault();
-        setOpen(false);
         setLoading(true);
 
         const username = e.target.username.value;
@@ -69,6 +53,17 @@ const Login = () => {
         setLoading(false);
         MakeToast("Logowanie nie powiodło się", "error");
     }
+
+    const checkAlreadyLogged = async () => {
+        const logged = await checkLogin();
+        if (logged) {
+            redirection("/panel");
+        }
+    }
+
+    React.useEffect(() => {
+        checkAlreadyLogged();
+    }, []);
 
 
     return (
@@ -90,7 +85,6 @@ const Login = () => {
                     </div>
                 </form>
             </div>
-            {open ? <Toast message={message} status={status} /> : null}
         </div>
     );
 }
