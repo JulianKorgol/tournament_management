@@ -10,11 +10,11 @@ const Matches = (props) => {
 
     const getMatches = async () => {
         const matches_response = await get(`dashboard/tournament/${tournament}/matches`, { withCredentials: true }).catch(err => err.response);
+        console.log(matches_response);
 
         if (matches_response.status === 200) {
-            if (matches_response.data.matches > 0) {
-                setMatches(matches_response.data.matches);
-            } else {
+            setMatches(matches_response.data.games);
+            if (matches_response.data.error === "No games to show") {
                 setNotFound(true);
             }
         }
@@ -30,11 +30,11 @@ const Matches = (props) => {
                 <h5>Brak meczy</h5>
             </div>
         )
-    } else { // TODO STYLE
+    } else {
         return (
-            <div className="matches">
+            <div className={styles.matches}>
                 {matches.map((match) => (
-                        <div className="match">
+                        <div key={match.player1 + match.player2} className={styles.match}>
                             <p>{match.player1} - {match.player2}</p>
                             <p>{match.player1_score}:{match.player2_score}</p>
                             <p>{match.date}</p>

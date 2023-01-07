@@ -11,7 +11,7 @@ from rest_framework.status import (
 )
 from rest_framework.response import Response
 from django.http import HttpResponse
-import datetime
+from datetime import datetime
 from django.db.models import Q
 from django.contrib.auth.models import User
 from .models import Account, Role, Tournament, AccountToTournament, Game
@@ -458,11 +458,17 @@ class AddScore(generics.GenericAPIView):
             except Tournament.DoesNotExist:
                 return Response({"error": "Invalid tournament"}, status=HTTP_400_BAD_REQUEST)
 
-            accounts = AccountToTournament.objects.filter(tournament=tournament, role='player')
-            if len(accounts) < 2:
+            role_accounts = Role.objects.get(name='player')
+            accounts_to_tournament = AccountToTournament.objects.filter(tournament=tournament, role=role_accounts)
+            if len(accounts_to_tournament) < 2:
                 return Response({"error": "Not enough players"}, status=HTTP_400_BAD_REQUEST)
 
+            accounts = []
+            for account in accounts_to_tournament:
+                accounts.append(account.account)
+
             accounts_data = AccountToTournamentSerializer(accounts, many=True).data
+
             return Response({"players": accounts_data}, status=HTTP_200_OK)
         return Response(None, status=HTTP_400_BAD_REQUEST)
 
@@ -487,13 +493,18 @@ class AddScore(generics.GenericAPIView):
             if not player1_username or not player2_username or not player1_score or not player2_score:
                 return Response({"error": "Invalid data"}, status=HTTP_400_BAD_REQUEST)
 
+            if player1_username == player2_username:
+                return Response({"error": "Invalid data"}, status=HTTP_400_BAD_REQUEST)
+
             try:
-                player1 = Account.objects.get(username=player1_username)
+                user_player1 = User.objects.get(username=player1_username)
+                player1 = Account.objects.get(user=user_player1)
             except Account.DoesNotExist:
                 return Response({"error": "Invalid player1"}, status=HTTP_400_BAD_REQUEST)
 
             try:
-                player2 = Account.objects.get(username=player2_username)
+                user_player2 = User.objects.get(username=player2_username)
+                player2 = Account.objects.get(user=user_player2)
             except Account.DoesNotExist:
                 return Response({"error": "Invalid player2"}, status=HTTP_400_BAD_REQUEST)
 

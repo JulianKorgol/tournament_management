@@ -7,11 +7,12 @@ import User from "../../functions/UserContext/UserContext";
 import { useParams } from "react-router-dom";
 import Matches from "../../components/Matches/Matches";
 import AddPeopleToTournament from "../../components/AddPeopleToTournament/AddPeopleToTournament";
+import AddResultsToTournaments from "../../components/AddResultsToTournaments/AddResultsToTournaments";
 
 
 const TournamentView = () => {
     const [tournament, setTournament] = React.useState({});
-    const { setLoading, MakeToast } = React.useContext(AppContext);
+    const { setLoading, MakeToast, refreshPage } = React.useContext(AppContext);
     const { checkLogin } = React.useContext(User);
     const [message, setMessage] = React.useState("");
     const [status, setStatus] = React.useState("success");
@@ -20,6 +21,7 @@ const TournamentView = () => {
     let { uuid } = useParams();
 
     const [buttonAddPeopleopen, setButtonAddPeopleopen] = React.useState(false);
+    const [buttonAddResultsopen, setButtonAddResultsopen] = React.useState(false);
 
     const checkUser = async () => {
         const logged = await checkLogin();
@@ -53,6 +55,7 @@ const TournamentView = () => {
         }
 
         setLoading(false);
+        refreshPage();
     }
 
 
@@ -65,16 +68,19 @@ const TournamentView = () => {
                 {user["role"] === "admin" || user["role"] === "coordinator" ?
                 <p className={styles.vip}>Twoje uprawnienia pozwalają na zarządzanie tym turniejem.</p> : null}
             </div>
-            <div className={styles.manage}>
-                <button className={styles.button_add}>Dodaj wynik</button>
-                <button className={styles.button_modify}>Zmodyfikuj wynik</button>
-                <button className={styles.button_modify} onClick={() => {setButtonAddPeopleopen(!buttonAddPeopleopen)}}>Dodaj osoby</button>
-                <button className={styles.button_modify} onClick={GenerateMatches}>Stwórz mecze, każdy z każdym</button>
-                <button className={styles.button_delete}>Usuń wynik</button>
-                <button className={styles.button_show}>Wyświetl nierozegrane mecze</button>
-            </div>
+            {user["role"] === "admin" || user["role"] === "coordinator" ?
+                <div className={styles.manage}>
+                    <button className={styles.button_add} onClick={() => {setButtonAddResultsopen(!buttonAddResultsopen)}}>Dodaj wynik</button>
+                    <button className={styles.button_modify}>Zmodyfikuj wynik</button>
+                    <button className={styles.button_modify} onClick={() => {setButtonAddPeopleopen(!buttonAddPeopleopen)}}>Dodaj osoby</button>
+                    <button className={styles.button_modify} onClick={GenerateMatches}>Stwórz mecze, każdy z każdym</button>
+                    <button className={styles.button_delete}>Usuń wynik</button>
+                    <button className={styles.button_show}>Wyświetl nierozegrane mecze</button>
+                </div>
+            : null}
             <div>
                 {buttonAddPeopleopen ? <div><AddPeopleToTournament uuid={uuid}/></div> : null}
+                {buttonAddResultsopen ? <div><AddResultsToTournaments uuid={uuid}/></div> : null}
             </div>
             <div className={styles.matches}>
                 <h4>Aktualne wyniki</h4>

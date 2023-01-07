@@ -41,9 +41,13 @@ function App() {
         }, 6000);
     }
 
+    const refreshPage = () => {
+        window.location.reload();
+    }
+
     return (
         <div className="App">
-            <AppContext.Provider value={{ loading, setLoading, MakeToast }}>
+            <AppContext.Provider value={{ loading, setLoading, MakeToast, refreshPage }}>
                 <User.Provider value={{ user, checkLogin }}>
                     {loading ? <ScreenLoader /> : null}
                     <Menu />
