@@ -6,6 +6,7 @@ import { get, post } from "../../functions/Requests/Requests";
 import AppContext from "../../functions/AppContext/AppContext";
 import Toast from "../../functions/Toast/Toast";
 import { useNavigate } from "react-router";
+import User from "../../functions/UserContext/UserContext";
 
 
 
@@ -15,6 +16,7 @@ const Login = () => {
     const [message, setMessage] = React.useState("");
     const [status, setStatus] = React.useState("success");
     const redirection = useNavigate();
+    const { setUser } = React.useContext(User);
 
 
     const MakeToast = (message, status) => {
@@ -25,7 +27,6 @@ const Login = () => {
             setOpen(false);
         }, 6000);
     }
-
 
     const loginuser = async (username, password) => {
         axios.defaults.withCredentials = true;
@@ -38,6 +39,8 @@ const Login = () => {
 
             if (userInfo.status === 200) {
                 axios.defaults.headers.common['X-CSRFToken'] = Cookies.get("csrftoken")
+
+                setUser(userInfo.data);
                 return true;
             }
         }
