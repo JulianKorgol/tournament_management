@@ -1,8 +1,22 @@
 import React from "react";
 import styles from "./Menu.module.scss";
+import { get } from "../../functions/Requests/Requests";
 
 
 const Menu = () => {
+    const [menuButton, setMenuButton] = React.useState(false);
+
+    const checkLogin = async () => {
+        const response = await get("me/", { withCredentials: true }).catch(err => err.response);
+        if (response.status === 200) {
+            setMenuButton(true);
+        }
+    }
+
+    React.useEffect(() => {
+        checkLogin()
+    },  []);
+
     return (
         <header className={styles.wrapper}>
             <span>
@@ -22,7 +36,7 @@ const Menu = () => {
                 </ul>
             </div>
             <div className={styles.buttonwrapper}>
-                <a className={styles.button} href="/login">Logowanie</a>
+                {menuButton ? <a className={styles.button} href="/panel">Panel</a> : <a className={styles.button} href="/login">Logowanie</a>}
             </div>
         </header>
     );

@@ -32,6 +32,8 @@ const AddPeopleToTournament = (props) => {
         } else {
             if (response.data.error === "User already in tournament") {
                 MakeToast("Użytkownik należy już do tego turnieju.", "error");
+            } else if (response.data.error === "That role can't be assigned to this account") {
+                MakeToast("Tego użytkownika nie można przydzielić do tego turnieju w wybranej roli.", "error");
             } else {
                 MakeToast("Coś poszło nie tak...", "error");
             }

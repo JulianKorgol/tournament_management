@@ -14,6 +14,7 @@ import ScreenLoader from "./functions/ScreenLoader/ScreenLoader"
 import PanelView from "./views/PanelView/PanelView";
 import TournamentView from "./views/TournamentView/TournamentView";
 import Toast from "./functions/Toast/Toast";
+import PublicView from "./views/PublicView/PublicView";
 
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
                             <Route path="/panel" element={<PanelView />} />
                             <Route path="/tournament/:uuid" element={<TournamentView />} />
                             <Route path="/tournament/:uuid/addpeople" element={<TournamentView />} />
+                            <Route path="/public" element={<PublicView />} />
                             <Route path="*" element={<NotFoundView />} />
                         </Routes>
                     </BrowserRouter>

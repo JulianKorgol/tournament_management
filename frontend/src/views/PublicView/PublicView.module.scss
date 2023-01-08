@@ -30,27 +30,5 @@
     .tournament:hover {
       border: 1px solid #19f5aa;
     }
-
-    .button {
-      padding: 15px;
-      border-radius: 15px;
-      background-color: #19f5aa;
-    }
-
-    .button:hover {
-      background-color: #19f5aa;
-      opacity: 0.8;
-    }
-  }
-
-}
-
-.matches {
-  display: inline-block;
-
-  .game {
-    margin: 20px;
-    padding: 10px 10px 0;
-    border: 1px solid #eaeaea;
   }
 }

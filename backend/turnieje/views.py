@@ -307,6 +307,9 @@ class AddPeopleToTournament(generics.GenericAPIView):
             except Account.DoesNotExist:
                 return Response({"error": "Invalid user"}, status=HTTP_400_BAD_REQUEST)
 
+            if account.role.name != role.name:
+                return Response({"error": "That role can't be assigned to this account"}, status=HTTP_400_BAD_REQUEST)
+
             try:
                 account_to_tournament = AccountToTournament.objects.get(account=account, tournament=tournament)
             except AccountToTournament.DoesNotExist:
@@ -649,20 +652,19 @@ class RemoveScore(generics.GenericAPIView):
 class MyGames(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, tournament_uuid):
+    def get(self, request):
         acc = Account.objects.get(user=request.user)
         role = acc.role.name
 
         if role == 'player':
-            if not tournament_uuid:
-                return Response({"error": "Invalid tournament"}, status=HTTP_400_BAD_REQUEST)
+            account_to_tournament = AccountToTournament.objects.filter(account=acc)
 
             try:
-                tournament = Tournament.objects.get(uuid=tournament_uuid)
+                tournaments = Tournament.objects.filter(uuid__in=account_to_tournament.values_list('tournament__uuid', flat=True))
             except Tournament.DoesNotExist:
                 return Response({"error": "Invalid tournament"}, status=HTTP_400_BAD_REQUEST)
 
-            games = Game.objects.filter(Q(player1=acc) | Q(player2=acc), tournament=tournament)
+            games = Game.objects.filter(Q(player1=acc) | Q(player2=acc), tournament__in=tournaments)
             if len(games) == 0:
                 return Response({"error": "You have no games"}, status=HTTP_400_BAD_REQUEST)
 
