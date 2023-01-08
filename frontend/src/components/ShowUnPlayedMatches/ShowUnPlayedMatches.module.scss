@@ -1,0 +1,19 @@
+.wrapper {
+  margin-bottom: 40px;
+  border: 1px solid #ccc;
+  padding: 40px;
+  display: inline-block;
+
+  .matches {
+    overflow-y: scroll;
+    height: 50vh;
+    border: 1px solid #ccc;
+
+    .match {
+      display: inline-block;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+  }
+}

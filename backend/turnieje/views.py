@@ -629,24 +629,13 @@ class RemoveScore(generics.GenericAPIView):
             except Tournament.DoesNotExist:
                 return Response({"error": "Invalid tournament"}, status=HTTP_400_BAD_REQUEST)
 
-            player1_username = request.data.get('player1')
-            player2_username = request.data.get('player2')
+            game_id = request.data.get('game_id')
 
-            if not player1_username or not player2_username:
+            if not game_id:
                 return Response({"error": "Invalid data"}, status=HTTP_400_BAD_REQUEST)
 
             try:
-                player1 = Account.objects.get(username=player1_username)
-            except Account.DoesNotExist:
-                return Response({"error": "Invalid player1"}, status=HTTP_400_BAD_REQUEST)
-
-            try:
-                player2 = Account.objects.get(username=player2_username)
-            except Account.DoesNotExist:
-                return Response({"error": "Invalid player2"}, status=HTTP_400_BAD_REQUEST)
-
-            try:
-                game = Game.objects.get(player1=player1, player2=player2, tournament=tournament)
+                game = Game.objects.get(id=int(game_id), tournament=tournament)
             except Game.DoesNotExist:
                 return Response({"error": "Game does not exist"}, status=HTTP_400_BAD_REQUEST)
 

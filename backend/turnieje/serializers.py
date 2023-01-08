@@ -100,7 +100,7 @@ class GameSerializer(serializers.ModelSerializer):
     player2 = serializers.CharField(source='player2.user.username')
     class Meta:
         model = Game
-        fields = ('player1', 'player2', 'player1_score', 'player2_score', 'date')
+        fields = ('id', 'player1', 'player2', 'player1_score', 'player2_score', 'date')
 
 
 class AccountToTournamentSerializer(serializers.ModelSerializer):
@@ -120,5 +120,4 @@ class AddScoreSerializer(serializers.Serializer):
 
 
 class RemoveScoreSerializer(serializers.Serializer):
-    player1 = serializers.CharField()
-    player2 = serializers.CharField()
+    game_id = serializers.IntegerField()

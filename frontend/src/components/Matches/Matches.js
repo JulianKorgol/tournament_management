@@ -10,7 +10,6 @@ const Matches = (props) => {
 
     const getMatches = async () => {
         const matches_response = await get(`dashboard/tournament/${tournament}/matches`, { withCredentials: true }).catch(err => err.response);
-        console.log(matches_response);
 
         if (matches_response.status === 200) {
             setMatches(matches_response.data.games);
