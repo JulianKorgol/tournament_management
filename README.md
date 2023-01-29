@@ -1,4 +1,5 @@
 # Turnieje App
+Attention! Project written quickly for school lessons! There may be errors in the code.
 
 ## Init project
 ```docker compose up```
